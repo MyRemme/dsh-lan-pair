@@ -26,6 +26,25 @@
     "cordis.patch.yml"
   ],
   "license": "Apache-2.0",
+  "author": "Hughes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MyRemme/dsh-lan-pair.git"
+  },
+  "homepage": "https://github.com/MyRemme/dsh-lan-pair#readme",
+  "bugs": {
+    "url": "https://github.com/MyRemme/dsh-lan-pair/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "cordis-plugin",
+    "lan",
+    "pairing",
+    "qrcode",
+    "remote-access"
+  ],
   "dsh": {
     "engines": {
       "dsh": ">=0.2.0-rc.1"
