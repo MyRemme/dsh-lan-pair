@@ -91,6 +91,30 @@
 - 插件分两半：Host 半（Node ESM，`lib/index.js`）与 Client 半（浏览器 bundle，`lib/client.js`）。
 - Host 半注册一条 exact `/` 路由以支持内网免密钥：内网来源直接获得注入好的应用外壳，其余来源原样交回 harness 的 fallback，因此桌面端行为完全不受影响。
 
+## 防火墙
+
+`lanBind: true` 时插件会通过 `netsh`（Windows）维护一条入站放行规则，规则名为 `lan-pair (auto)`，参数为 `dir=in action=allow protocol=TCP localport=<端口> profile=private,domain`。状态可从 `/api/pair/lan-bind` 的 `firewall` 字段读取：
+
+```json
+{ "ok": true, "managed": true, "note": "netsh" }
+```
+
+**这一步需要管理员权限。** 若 DSH 以普通权限运行，规则写入会失败，字段返回 `ok: false`，而 Windows 防火墙默认阻止未匹配的入站连接——此时**同内网的其他设备打不开界面**，但本机访问自己的局域网 IP 仍然正常，容易误判为「已经连通」。
+
+要判断是否真的放行，应看 `firewall.ok`，而不是从本机访问自己的局域网 IP。修复方式是**以管理员身份启动一次 DSH**（插件会自动补上规则），或在管理员终端里手工执行：
+
+```powershell
+netsh advfirewall firewall add rule name="lan-pair (auto)" dir=in action=allow protocol=TCP localport=19387 profile=private,domain
+```
+
+注意规则名必须与插件一致。若手工用了别的名字，插件检测不到，`firewall.ok` 会一直为 `false`。
+
 ## 许可证
 
-Apache-2.0。基于 `@linxin666/dsh-remote-web-ui` 0.4.4 改造，原始许可证见 `LICENSE`。
+Apache-2.0，见 `LICENSE`。
+
+Copyright 2026 Hughes
+
+本项目基于 [`@linxin666/dsh-remote-web-ui`](https://www.npmjs.com/package/@linxin666/dsh-remote-web-ui) 0.4.4 改造，其原始许可证一并保留在 `LICENSE` 中。
+
+> `LICENSE` 末尾的 `Copyright [yyyy] [name of copyright owner]` 属于 Apache-2.0 的 APPENDIX 教学示例，按标准做法原样保留、不填写。
