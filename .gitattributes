@@ -1,0 +1,7 @@
+# 统一换行符，避免 Windows 上的 CRLF 警告与跨平台差异
+* text=auto eol=lf
+
+# 二进制/生成物不做换行转换
+*.svg text
+*.png binary
+*.ico binary

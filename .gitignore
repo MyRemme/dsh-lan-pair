@@ -1,0 +1,21 @@
+# 依赖与构建产物（本仓库只发布构建好的 lib/，不发布 node_modules）
+node_modules/
+
+# 本插件是直接改动编译产物的 fork，没有可构建的 TypeScript 源码；
+# 若将来补回源码，取消下面两行的注释。
+# src/
+# tsconfig.json
+
+# 运行时/本地数据
+*.log
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.vscode/
+.idea/
+
+# 本地验证与一次性脚本（不属于插件本体）
+_*
+*.bak
+*.lan-pair-bak-*
