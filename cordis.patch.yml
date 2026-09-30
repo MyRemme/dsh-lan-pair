@@ -1,12 +1,15 @@
 # dsh-lan-pair：内网配对远程访问（Host 半 + Web Client 半的双面插件）。
 #
-# 本包由 @linxin666/dsh-remote-web-ui 0.4.4 改造而来，已移除全部公网功能：
+# MODIFIED FILE — 本文件由 @linxin666/dsh-remote-web-ui 0.4.4（Apache-2.0）的
+# 对应文件改造而来，已删除上游的隧道/中继相关行。Apache-2.0 §4(b) 要求保留本声明。
+#
+# 本包已移除全部公网功能：
 #   - Cloudflare quick / named 隧道（cloudflared 依赖已从 dependencies 摘除）
 #   - dsh-market 固定域名中继（relay registry）
 #   - 公网地址 publicBaseUrl 及配套的隧道/中继状态帧
 #   - 面向 dsh-market.com 的每日匿名心跳上报
-# 保留并强化内网链路：配对令牌、设备会话、/api/pair 路由族、api/gate 监听、
-# 局域网绑定与防火墙规则，以及新增的「内网免密钥访问」开关。
+# 保留并强化内网链路：配对令牌、设备会话、/api/pair 路由族、局域网绑定与
+# 防火墙规则，以及新增的「内网免密钥访问」开关。
 #
 # 这一层把插件行插进 profile；profile 自己的 cordis.patch.yml 再用同一个
 # id（lan-pair）覆盖 config，所以两处的 id 必须一致。

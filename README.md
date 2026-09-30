@@ -63,8 +63,8 @@
   config:
     lanBind: true              # 把 Web 服务绑定改写为 0.0.0.0，并维护防火墙规则
     allowLanWithoutKey: true   # 内网设备无需配对/令牌直接打开界面
-    maxDevices: 32             # 已授权设备上限
-    idleExpireMs: 315360000000 # 设备空闲过期（毫秒）
+    maxDevices: 4               # 已授权设备上限（默认 4，最大 64）
+    idleExpireMs: 2592000000   # 设备空闲过期（毫秒），默认 30 天
     # requirePairingForLan: true # 默认 true，通常无需显式设置
 ```
 
@@ -90,6 +90,11 @@
 - 本仓库发布的是**构建产物**（`lib/*.js`），不含 TypeScript 源码。产物为未压缩 ESM，保留了 `//#region` 标记与完整注释，可直接阅读与修改。
 - 插件分两半：Host 半（Node ESM，`lib/index.js`）与 Client 半（浏览器 bundle，`lib/client.js`）。
 - Host 半注册一条 exact `/` 路由以支持内网免密钥：内网来源直接获得注入好的应用外壳，其余来源原样交回 harness 的 fallback，因此桌面端行为完全不受影响。
+- `lib/invariant.js` 是不变量伴生插件，需要 composition 挂载 `@deepseek-ai/dsh-invariants` 才会运行。DSH 桌面版默认的 `dsh-base` / `dsh-web-app` 两个 bundle 都不挂载该服务，因此这条检查在桌面版下不会执行；它只在自定义 composition（如 `dsh-sdk-minimal`）下生效。
+
+### 与已安装副本的关系
+
+本仓库是**唯一权威来源**。若你把插件装进 profile 的 `node_modules` 并由其他工具（如 `dsh-purge`）改写过该副本，副本会与仓库产生差异。差异只影响运行时，不影响本仓库；要回到权威状态，用本仓库覆盖副本后重启 DSH。**仓库中的 `lib/index.js` 已经包含 `stripManagedBlock` 保留外来行的修复，不需要任何外部补丁再改一次。**
 
 ## 防火墙
 
